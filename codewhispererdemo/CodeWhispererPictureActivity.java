@@ -36,7 +36,9 @@ public class CodeWhispererPictureSaveActivity {
             LOGGER.error(message);
             throw new CodeWhispererPictureException(message);
         }
-        String storageLocation = codeWhispererStorage.storePicture(pictureId, picture);
+        // attempt to store picture for at most 10 seconds.
+        int timeout = 10;
+        String storageLocation = codeWhispererStorage.storePicture(pictureId, picture, timeout);
 
         CodeWhispererPictureMetadata pictureMetadata = ImmutableCodeWhispererPictureMetadata.builder()
                 .withPictureId(pictureId)
@@ -44,6 +46,7 @@ public class CodeWhispererPictureSaveActivity {
                 .withStorageLocation(storageLocation)
                 .build();
         codeWhispererCache.put(pictureId, pictureMetadata);
+
         codeWhispererDB.storePictureMetadata(pictureMetadata);
         return pictureId;
     }
