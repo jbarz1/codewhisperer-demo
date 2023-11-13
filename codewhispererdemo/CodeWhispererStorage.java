@@ -32,7 +32,7 @@ public class CodeWhispererStorage {
                 .key(pictureId)
                 .build();
         try {
-            s3Client.putObject(objectRequest, requestBody).get(timeout);
+            s3Client.putObject(objectRequest, requestBody).get(timeout, TimeUnit.SECONDS);
             return UUID.randomUUID() + "-" + pictureId;
         } catch (Exception e) {
             String message = String.format("Exception occurred while storing metadata for pictureId: %s", pictureId);
