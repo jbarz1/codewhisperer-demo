@@ -13,11 +13,19 @@ import java.util.Optional;
 /**
  * Custom implementation of a cache using Hashmap to store CodeWhispererPictureMetadata
  */
-public class CodeWhispererCache<String, CodeWhispererPictureMetadata> {
+public class CodeWhispererCache {
     private final HashMap<String, Pair<CodeWhispererPictureMetadata, Timestamp>> cacheMap;
+    private static CodeWhispererCache singletonInstance = null;
     private final long EXPIRATION_TIME_IN_SECONDS = 10 * 60;
 
-    public CodeWhispererCache() {
+    public static CodeWhispererCache getInstance() {
+        if (singletonInstance == null) {
+            singletonInstance = new CodeWhispererCache();
+        }
+        return singletonInstance;
+    }
+
+    private CodeWhispererCache() {
         this.cacheMap = new HashMap<>();
     }
 

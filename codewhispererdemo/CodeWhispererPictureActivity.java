@@ -13,23 +13,14 @@ import java.util.Optional;
 public class CodeWhispererPictureSaveActivity {
     private static final Logger LOGGER = LoggerFactory.getLogger(CodeWhispererPictureSaveActivity.class);
 
-    private final CodeWhispererCache<String, CodeWhispererPictureMetadata> codeWhispererCache;
-    private final CodeWhispererDB codeWhispererDB;
-    private final CodeWhispererStorage codeWhispererStorage;
-
-    @Inject
-    public CodeWhispererPictureSaveActivity(final CodeWhispererCache<String, CodeWhispererPictureMetadata> codeWhispererCache,
-                                        final CodeWhispererDB codeWhispererDB,
-                                        final CodeWhispererStorage codeWhispererStorage) {
-        this.codeWhispererCache = codeWhispererCache;
-        this.codeWhispererDB = codeWhispererDB;
-        this.codeWhispererStorage = codeWhispererStorage;
-    }
-
     /**
      * Persists the CodeWhisperer picture in the system.
      */
     public String savePicture(final String pictureId, final RequestBody picture) {
+        CodeWhispererCache codeWhispererCache = CodeWhispererCache.getInstance();
+        CodeWhispererStorage codeWhispererStorage = CodeWhispererStorage.getInstance();
+        CodeWhispererDB codeWhispererDB = CodeWhispererDB.getInstance();
+
         Optional<CodeWhispererPictureMetadata> pictureMetadataFromCache = codeWhispererCache.get(pictureId);
         if (pictureMetadataFromCache.isPresent()) {
             String message = String.format("Picture already exists for pictureId %s", pictureId);

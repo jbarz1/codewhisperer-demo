@@ -15,15 +15,20 @@ import software.amazon.awssdk.enhanced.dynamodb.model.GetItemEnhancedRequest;
 import software.amazon.awssdk.enhanced.dynamodb.model.DeleteItemEnhancedRequest;
 import software.amazon.awssdk.enhanced.dynamodb.model.PutItemEnhancedRequest;
 
-import javax.inject.Inject;
-
 public class CodeWhispererDB {
     private static final Logger LOGGER = LoggerFactory.getLogger(CodeWhispererDB.class);
+    private static CodeWhispererDB singletonInstance = null;
     private final DynamoDbEnhancedClient dynamodbClient;
     private final DynamoDbTable<CodeWhispererPictureMetadata> table;
     private final String TABLE_NAME = "CodeWhispererDemo";
 
-    @Inject
+    public static CodeWhispererDB getInstance() {
+        if (singletonInstance == null) {
+            singletonInstance = new CodeWhispererDB(DynamoDbEnhancedClient.builder().build());
+        }
+        return singletonInstance;
+    }
+
     public CodeWhispererDB(final DynamoDbEnhancedClient dynamodbClient) {
         this.dynamodbClient = Validate.notNull(dynamodbClient);
         table = dynamodbClient.table(TABLE_NAME, TableSchema.fromBean(CodeWhispererPictureMetadata.class));

@@ -2,7 +2,6 @@ package com.amazon.aws.vector.consolas.controlplane.service.codewhispererdemo;
 
 import com.amazon.aws.vector.consolas.commons.exception.DependencyException;
 import com.amazon.aws.vector.consolas.controlplane.service.codewhispererdemo.exception.CodeWhispererPictureException;
-import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import software.amazon.awssdk.core.sync.RequestBody;
@@ -18,11 +17,18 @@ import java.util.UUID;
 public class CodeWhispererStorage {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CodeWhispererStorage.class);
+    private static CodeWhispererStorage singletonInstance = null;
     private final S3AsyncClient s3Client;
     private final String BUCKET_NAME = "CodeWhispererPictures";
 
-    @Inject
-    public CodeWhispererStorage(final S3AsyncClient s3Client) {
+    public static CodeWhispererStorage getInstance() {
+        if (singletonInstance == null) {
+            singletonInstance = new CodeWhispererStorage(S3AsyncClient.builder().build());
+        }
+        return singletonInstance;
+    }
+
+    private CodeWhispererStorage(final S3AsyncClient s3Client) {
         this.s3Client = s3Client;
     }
 
