@@ -19,7 +19,7 @@ public class CodeWhispererPictureSaveActivity {
     public String savePicture(final String pictureId, final RequestBody picture) {
         CodeWhispererCache codeWhispererCache = CodeWhispererCache.getInstance();
 
-        Optional<CodeWhispererPictureMetadata> pictureMetadataFromCache = CodeWhispererCache.getInstance().get(pictureId);
+        Optional<CodeWhispererPictureMetadata> pictureMetadataFromCache = codeWhispererCache.get(pictureId);
         if (pictureMetadataFromCache.isPresent()) {
             String message = String.format("Picture already exists for pictureId %s", pictureId);
             LOGGER.error(message);
