@@ -17,6 +17,8 @@ public class CodeWhispererPictureSaveActivity {
      * Persists the CodeWhisperer picture in the system.
      */
     public String savePicture(final String pictureId, final RequestBody picture) {
+        CodeWhispererCache codeWhispererCache = CodeWhispererCache.getInstance();
+
         Optional<CodeWhispererPictureMetadata> pictureMetadataFromCache = CodeWhispererCache.getInstance().get(pictureId);
         if (pictureMetadataFromCache.isPresent()) {
             String message = String.format("Picture already exists for pictureId %s", pictureId);
@@ -32,7 +34,7 @@ public class CodeWhispererPictureSaveActivity {
                 .withName(pictureId)
                 .withStorageLocation(storageLocation)
                 .build();
-        CodeWhispererCache.getInstance().put(pictureId, pictureMetadata);
+        codeWhispererCache.put(pictureId, pictureMetadata);
 
         CodeWhispererDB.getInstance().storePictureMetadata(pictureMetadata);
         return pictureId;
@@ -42,7 +44,8 @@ public class CodeWhispererPictureSaveActivity {
      * Gets the CodeWhisperer picture location.
      */
     public String getPictureLocation(final String pictureId) {
-        Optional<CodeWhispererPictureMetadata> pictureMetadataFromCache = CodeWhispererCache.getInstance().get(pictureId);
+        CodeWhispererCache codeWhispererCache = CodeWhispererCache.getInstance();
+        Optional<CodeWhispererPictureMetadata> pictureMetadataFromCache = codeWhispererCache.get(pictureId);
         if (pictureMetadataFromCache.isPresent()) {
             return pictureMetadataFromCache.get().getStorageLocation();
         } else {
