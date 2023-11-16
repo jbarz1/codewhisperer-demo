@@ -46,6 +46,10 @@ public class CodeWhispererPictureSaveActivity {
      * Gets the CodeWhisperer picture location.
      */
     public String getPictureLocation(final String pictureId) {
+        CodeWhispererCache codeWhispererCache = CodeWhispererCache.getInstance();
+        CodeWhispererStorage codeWhispererStorage = CodeWhispererStorage.getInstance();
+        CodeWhispererDB codeWhispererDB = CodeWhispererDB.getInstance();
+
         Optional<CodeWhispererPictureMetadata> pictureMetadataFromCache = codeWhispererCache.get(pictureId);
         if (pictureMetadataFromCache.isPresent()) {
             return pictureMetadataFromCache.get().getStorageLocation();
